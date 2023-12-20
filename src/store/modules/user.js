@@ -1,10 +1,21 @@
+import { getToken, setToken, removeToken } from '@/utils/auth'
+
 const state = {
-  token: null
+  // 从缓存中读取初始值
+  token: getToken()
 }
 
 const mutations = {
   setToken(state, token) {
     state.token = token
+    // 同步到缓存
+    setToken(token)
+  },
+  removeToken() {
+    // 删除vuex的token
+    state.token = null
+    // 删除缓存的token
+    removeToken()
   }
 }
 
