@@ -21,6 +21,7 @@
           <el-form-item>
             <el-button type="primary" style="width: 350px" @click="login">登录</el-button>
           </el-form-item>
+          <el-button @click="test">test</el-button>
         </el-form>
       </el-card>
     </div>
@@ -28,6 +29,7 @@
 </template>
 
 <script>
+import request from '@/utils/request'
 export default {
   name: 'Login',
   data() {
@@ -72,6 +74,16 @@ export default {
       this.$refs.form.validate((isOK) => {
         if (isOK) {
           this.$store.dispatch('user/login', this.loginForm)
+        }
+      })
+    },
+    test() {
+      request({
+        url: '/sys/login',
+        method: 'post',
+        data: {
+          mobile: '13800000002',
+          password: 'hm#qd@23!'
         }
       })
     }
