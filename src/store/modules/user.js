@@ -22,7 +22,6 @@ const mutations = {
 
 const actions = {
   async login(context, data) {
-    console.log(data)
     // todo: 调用接口
     const token = await login(data)
     // 返回一个token
