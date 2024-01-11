@@ -8,7 +8,7 @@ import store from '@/store'
  */
 
 const whiteList = ['/login', '404']
-router.beforeEach((to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   nProgress.start()
   if (store.getters.token) {
     if (to.path === '/login') {
@@ -16,6 +16,10 @@ router.beforeEach((to, from, next) => {
       next('/')
       nProgress.done()
     } else {
+      // 判断是否获取过资料
+      if (!store.getters.userId) {
+        await store.dispatch('user/getUserInfo')
+      }
       // 放过
       next()
     }
