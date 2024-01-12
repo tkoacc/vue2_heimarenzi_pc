@@ -29,7 +29,8 @@
           <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
             <el-dropdown-item>项目地址</el-dropdown-item>
           </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
+          <!-- prevent阻止默认事件 -->
+          <a target="_blank" @click.prevent="updatePassword">
             <el-dropdown-item>修改密码</el-dropdown-item>
           </a>
           <!-- native事件修饰符 -->
@@ -40,6 +41,11 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <!-- 放置dialog -->
+    <!-- sync 可以接受子组件传过来的事件和值 -->
+    <el-dialog width="500px" append-to-body title="修改密码" :visible.sync="showDialog">
+      <!-- 放置表单 -->
+    </el-dialog>
   </div>
 </template>
 
@@ -53,6 +59,12 @@ export default {
     Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      // 隐藏dialog
+      showDialog: false
+    }
+  },
   computed: {
     // 引入头像和用户名称
     ...mapGetters([
@@ -62,6 +74,10 @@ export default {
     ])
   },
   methods: {
+    updatePassword() {
+      // 弹出层
+      this.showDialog = true
+    },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
