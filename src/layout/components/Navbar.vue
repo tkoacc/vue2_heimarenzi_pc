@@ -43,8 +43,23 @@
     </div>
     <!-- 放置dialog -->
     <!-- sync 可以接受子组件传过来的事件和值 -->
-    <el-dialog width="500px" append-to-body title="修改密码" :visible.sync="showDialog">
+    <el-dialog width="500px" append-to-body title="修改密码" :visible.sync="showDialog" @close="btnCancel">
       <!-- 放置表单 -->
+      <el-form ref="passForm" label-width="80px" :model="passForm" :rules="rules">
+        <el-form-item label="旧密码" prop="oldPassword">
+          <el-input v-model="passForm.oldPassword" show-password size="small" />
+        </el-form-item>
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input v-model="passForm.newPassword" show-password size="small" />
+        </el-form-item>
+        <el-form-item label="确认密码" prop="confirmPassword">
+          <el-input v-model="passForm.confirmPassword" show-password size="small" />
+        </el-form-item>
+        <el-form-item>
+          <el-button size="mini" type="primary" @click="btnOK">确认</el-button>
+          <el-button size="mini" @click="btnCancel">取消</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -53,6 +68,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import { updatePassword } from '@/api/user'
 
 export default {
   components: {
@@ -61,8 +77,51 @@ export default {
   },
   data() {
     return {
-      // 隐藏dialog
-      showDialog: false
+      // 控制弹层的显示和隐藏
+      showDialog: false,
+      passForm: {
+        // 旧密码
+        oldPassword: '',
+        // 新密码
+        newPassword: '',
+        // 确认密码
+        confirmPassword: ''
+      },
+      rules: {
+        // 旧密码
+        oldPassword: [{
+          required: true,
+          message: '旧密码不能为空',
+          trigger: 'blur'
+        }],
+        // 新密码
+        newPassword: [{
+          required: true,
+          message: '新密码不能为空',
+          trigger: 'blur'
+        }, {
+          trigger: 'blur',
+          min: 6,
+          max: 16,
+          message: '密码长度在 6 到 16 个字符'
+        }],
+        // 确认密码
+        confirmPassword: [{
+          required: true,
+          message: '确认密码不能为空',
+          trigger: 'blur'
+        }, {
+          trigger: 'blur',
+          validator: (rule, value, callback) => {
+            // value
+            if (this.passForm.newPassword === value) {
+              callback()
+            } else {
+              callback(new Error('两次密码不一致'))
+            }
+          }
+        }]
+      }
     }
   },
   computed: {
@@ -84,6 +143,24 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login`)
+    },
+    // 确定
+    btnOK() {
+      this.$refs.passForm.validate(async(isOK) => {
+        if (isOK) {
+        // 调用接口
+          await updatePassword(this.passForm)
+          this.$message.success('修改密码成功')
+          this.btnCancel()
+        }
+      })
+    },
+    // 取消
+    btnCancel() {
+      // 成功了 重置表单
+      this.$refs.passForm.resetFields()
+      // 关闭弹层
+      this.showDialog = false
     }
   }
 }
