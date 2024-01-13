@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <div class="app-container">
-      组织架构
+      社保管理
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'Department'
+  name: 'Social'
 }
 </script>
