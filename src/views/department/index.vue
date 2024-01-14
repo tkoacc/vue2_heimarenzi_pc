@@ -13,7 +13,7 @@
             align="middle"
           >
             <el-col>传智教育-{{ data.name }}</el-col>
-            <el-col :span="4">
+            <el-col :span="6">
               <span class="tree-manager">{{ data.managerName }}</span>
               <el-dropdown>
                 <!-- 显示区域内容 -->
@@ -36,16 +36,26 @@
 </template>
 
 <script>
+import { getDepartment } from '@/api/department'
 export default {
   name: 'Department',
   data() {
     return {
       // 数据属性
-      depts: [{ name: '传智教育', managerName: '管理员', children: [{ name: '总裁办', managerName: '张三' }, { name: '行政部', managerName: '李四' }, { name: '人事部', managerName: '王五' }] }],
+      depts: [],
       defaultProps: {
         label: 'name',
         children: 'children'
       }
+    }
+  },
+  created() {
+    this.getDepartment()
+  },
+  methods: {
+    async getDepartment() {
+      const res = await getDepartment()
+      this.depts = res
     }
   }
 }
@@ -57,7 +67,7 @@ export default {
   font-size: 14px;
 }
 .tree-manager{
-  width: 50px;
+  width: 100px;
   display: inline-block;
   margin: 10px;
 }
