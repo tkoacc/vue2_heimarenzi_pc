@@ -2,7 +2,7 @@
   <div class="container">
     <div class="app-container">
       <!-- 展示树形结构 -->
-      <el-tree default-expand-all :data="depts" :props="defaultProps">
+      <el-tree :expand-on-click-node="false" default-expand-all :data="depts" :props="defaultProps">
         <!-- 节点结构 -->
         <!-- v-slot -->
         <template v-slot="{data}">
@@ -15,16 +15,16 @@
             <el-col>传智教育-{{ data.name }}</el-col>
             <el-col :span="6">
               <span class="tree-manager">{{ data.managerName }}</span>
-              <el-dropdown>
+              <el-dropdown @command="operateDept">
                 <!-- 显示区域内容 -->
                 <span class="el-dropdown-link">
                   操作<i class="el-icon-arrow-down el-icon--right" />
                 </span>
                 <!-- 下拉菜单选项 -->
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>添加子部门</el-dropdown-item>
-                  <el-dropdown-item>编辑部门</el-dropdown-item>
-                  <el-dropdown-item>删除</el-dropdown-item>
+                  <el-dropdown-item command="add">添加子部门</el-dropdown-item>
+                  <el-dropdown-item command="edit">编辑部门</el-dropdown-item>
+                  <el-dropdown-item command="del">删除</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-col>
@@ -32,16 +32,21 @@
         </template>
       </el-tree>
     </div>
+    <!-- 放置弹层 -->
+    <add-dept :show-dialog.sync="showDialog" />
   </div>
 </template>
 
 <script>
 import { getDepartment } from '@/api/department'
 import { transListToTreeData } from '@/utils'
+import AddDept from './components/add-dept'
 export default {
   name: 'Department',
+  components: { AddDept },
   data() {
     return {
+      showDialog: false,
       // 数据属性
       depts: [],
       defaultProps: {
@@ -57,6 +62,14 @@ export default {
     async getDepartment() {
       const res = await getDepartment()
       this.depts = transListToTreeData(res, 0)
+    },
+    // 操作部门方法
+    operateDept(type) {
+      if (type === 'add') {
+        // 添加子部门
+        // 显示弹层
+        this.showDialog = true
+      }
     }
   }
 }
@@ -70,6 +83,6 @@ export default {
 .tree-manager{
   width: 100px;
   display: inline-block;
-  margin: 10px;
+  margin: 15px;
 }
 </style>
