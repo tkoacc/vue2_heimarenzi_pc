@@ -37,6 +37,7 @@
 
 <script>
 import { getDepartment } from '@/api/department'
+import { transListToTreeData } from '@/utils'
 export default {
   name: 'Department',
   data() {
@@ -55,7 +56,7 @@ export default {
   methods: {
     async getDepartment() {
       const res = await getDepartment()
-      this.depts = res
+      this.depts = transListToTreeData(res, 0)
     }
   }
 }
