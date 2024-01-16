@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { getDepartment } from '@/api/department'
 export default {
   props: {
     showDialog: {
@@ -56,6 +57,19 @@ export default {
           max: 10,
           message: '部门编码要求2-10个字符',
           trigger: 'blur'
+        }, {
+          trigger: 'blur',
+          // 自定义校验模式
+          validator: async(rule, value, callback) => {
+            // value 就是我们输入的值
+            const res = await getDepartment()
+            // result 数组中是否存在 value
+            if (res.some(item => item.code === value)) {
+              callback(new Error('部门编码不能重复'))
+            } else {
+              callback()
+            }
+          }
         }],
         // 部门介绍
         introduce: [{ required: true, message: '部门介绍不能为空', trigger: 'blur' }, {
@@ -71,6 +85,18 @@ export default {
           max: 10,
           message: '部门名称要求2-10个字符',
           trigger: 'blur'
+        }, { trigger: 'blur',
+          // 自定义校验模式
+          validator: async(rule, value, callback) => {
+            // value 就是我们输入的值
+            const res = await getDepartment()
+            // result 数组中是否存在 value
+            if (res.some(item => item.name === value)) {
+              callback(new Error('部门中已经有该名称了'))
+            } else {
+              callback()
+            }
+          }
         }]
         // 父级部门的id
         // pid: ''
