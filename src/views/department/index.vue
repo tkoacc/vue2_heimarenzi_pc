@@ -15,7 +15,7 @@
             <el-col>传智教育-{{ data.name }}</el-col>
             <el-col :span="6">
               <span class="tree-manager">{{ data.managerName }}</span>
-              <el-dropdown @command="operateDept">
+              <el-dropdown @command="operateDept($event, data.id)">
                 <!-- 显示区域内容 -->
                 <span class="el-dropdown-link">
                   操作<i class="el-icon-arrow-down el-icon--right" />
@@ -33,7 +33,7 @@
       </el-tree>
     </div>
     <!-- 放置弹层 -->
-    <add-dept :show-dialog.sync="showDialog" />
+    <add-dept :current-node-id="currentNodeId" :show-dialog.sync="showDialog" />
   </div>
 </template>
 
@@ -46,6 +46,9 @@ export default {
   components: { AddDept },
   data() {
     return {
+      // 存储当前点击的id
+      currentNodeId: null,
+      // 控制弹层
       showDialog: false,
       // 数据属性
       depts: [],
@@ -64,11 +67,12 @@ export default {
       this.depts = transListToTreeData(res, 0)
     },
     // 操作部门方法
-    operateDept(type) {
+    operateDept(type, id) {
       if (type === 'add') {
         // 添加子部门
         // 显示弹层
         this.showDialog = true
+        this.currentNodeId = id
       }
     }
   }
