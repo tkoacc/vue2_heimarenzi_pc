@@ -33,7 +33,8 @@
       </el-tree>
     </div>
     <!-- 放置弹层 -->
-    <add-dept :current-node-id="currentNodeId" :show-dialog.sync="showDialog" @updateDepartment="getDepartment" />
+    <!-- ref可以获取dom实例对象 也可以获取自定义组建的实例对象 -->
+    <add-dept ref="addDept" :current-node-id="currentNodeId" :show-dialog.sync="showDialog" @updateDepartment="getDepartment" />
   </div>
 </template>
 
@@ -73,6 +74,17 @@ export default {
         // 显示弹层
         this.showDialog = true
         this.currentNodeId = id
+      } else if (type === 'edit') {
+        // 编辑部门场景
+        this.showDialog = true
+        // 记录id后面获取数据
+        this.currentNodeId = id
+        // 子组件获取数据
+        // 父组件调用子组件的方法获取数据
+        // 等同于子组件的this
+        this.$nextTick(() => {
+          this.$refs.addDept.getDepartmentDetail()
+        })
       }
     }
   }
