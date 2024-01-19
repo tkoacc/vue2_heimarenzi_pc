@@ -75,7 +75,12 @@ export default {
           // 自定义校验模式
           validator: async(rule, value, callback) => {
             // value 就是我们输入的值
-            const res = await getDepartment()
+            let res = await getDepartment()
+            // 判断是否是编辑模式
+            if (this.formData.id) {
+              // 编辑模式
+              res = res.filter(item => item.id !== this.formData.id)
+            }
             // result 数组中是否存在 value
             if (res.some(item => item.code === value)) {
               callback(new Error('部门编码不能重复'))
@@ -102,7 +107,11 @@ export default {
           // 自定义校验模式
           validator: async(rule, value, callback) => {
             // value 就是我们输入的值
-            const res = await getDepartment()
+            let res = await getDepartment()
+            if (this.formData.id) {
+              // 编辑模式 需要排除自己
+              res = res.filter(item => item.id !== this.formData.id)
+            }
             // result 数组中是否存在 value
             if (res.some(item => item.name === value)) {
               callback(new Error('部门中已经有该名称了'))
