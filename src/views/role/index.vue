@@ -30,7 +30,13 @@
       <!-- 放置分页组件 -->
       <el-row type="flex" style="height:60px" align="middle" justify="end">
         <!-- 放置分页组件 -->
-        <el-pagination layout="prev, pager, next" />
+        <el-pagination
+          :page-size="pageParams.pagesize"
+          :current-page="pageParams.page"
+          :total="pageParams.total"
+          layout="prev, pager, next"
+          @current-change="changePage"
+        />
       </el-row>
     </div>
   </div>
@@ -41,7 +47,16 @@ export default {
   name: 'Role',
   data() {
     return {
-      list: []
+      list: [],
+      // 将分页信息放置到一个对象中
+      pageParams: {
+        // 第几页
+        page: 1,
+        // 每页几条
+        pagesize: 5,
+        // 总条数
+        total: 0
+      }
     }
   },
   created() {
@@ -49,8 +64,17 @@ export default {
   },
   methods: {
     async getRoleList() {
-      const { rows } = await getRoleList()
+      const { rows, total } = await getRoleList(this.pageParams)
+      // 赋值数据
       this.list = rows
+      // 赋值总条数
+      this.pageParams.total = total
+    },
+    // 切换分页时 请求新的数据
+    changePage(newPage) {
+      // 赋值当前页码
+      this.pageParams.page = newPage
+      this.getRoleList()
     }
   }
 }
