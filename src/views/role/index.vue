@@ -18,19 +18,34 @@
         <el-table-column prop="state" align="center" width="200" label="启用">
           <!-- 自定义列结构 -->
           <template v-slot="{ row }">
-            <span>
+            <el-switch v-if="row.isEdit" />
+            <span v-else>
               {{ row.state === 1 ? '已启用' : row.state === 0 ? '未启用' : '无' }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column prop="description" align="center" label="描述" />
+        <el-table-column prop="description" align="center" label="描述">
+          <template v-slot="{ row }">
+            <el-input v-if="row.isEdit" type="textarea" />
+            <span v-else>{{ row.description }}</span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="操作">
           <!-- 放置操作按钮 -->
           <template v-slot="{ row }">
-            <el-button size="mini" type="text">分配权限</el-button>
-            <el-button size="mini" type="text" @click="btnEditRow(row)">编辑</el-button>
-            <el-button size="mini" type="text">删除</el-button>
+            <template v-if="row.isEdit">
+              <!-- 编辑状态 -->
+              <el-button size="mini" type="primary">确定</el-button>
+              <el-button size="mini">取消</el-button>
+            </template>
+            <template v-else>
+              <!-- 非编辑状态 -->
+              <el-button size="mini" type="text">分配权限</el-button>
+              <el-button size="mini" type="text" @click="btnEditRow(row)">编辑</el-button>
+              <el-button size="mini" type="text">删除</el-button>
+            </template>
           </template>
+
         </el-table-column>
       </el-table>
       <!-- 放置分页组件 -->
