@@ -8,7 +8,13 @@
       <!-- 放置table组件 -->
       <el-table :data="list">
         <!-- 放置列 -->
-        <el-table-column prop="name" align="center" width="200" label="角色" />
+        <el-table-column prop="name" align="center" width="200" label="角色">
+          <template v-slot="{ row }">
+            <!-- 条件判断 -->
+            <el-input v-if="row.isEdit" size="mini" />
+            <span v-else>{{ row.name }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="state" align="center" width="200" label="启用">
           <!-- 自定义列结构 -->
           <template v-slot="{ row }">
@@ -20,9 +26,9 @@
         <el-table-column prop="description" align="center" label="描述" />
         <el-table-column align="center" label="操作">
           <!-- 放置操作按钮 -->
-          <template>
+          <template v-slot="{ row }">
             <el-button size="mini" type="text">分配权限</el-button>
-            <el-button size="mini" type="text">编辑</el-button>
+            <el-button size="mini" type="text" @click="btnEditRow(row)">编辑</el-button>
             <el-button size="mini" type="text">删除</el-button>
           </template>
         </el-table-column>
@@ -108,6 +114,11 @@ export default {
       this.list = rows
       // 赋值总条数
       this.pageParams.total = total
+      // 针对每一行数据添加一个编辑标记
+      this.list.forEach(item => {
+        // 添加一个属性 初始值为false
+        this.$set(item, 'isEdit', false)
+      })
     },
     // 切换分页时 请求新的数据
     changePage(newPage) {
@@ -130,6 +141,11 @@ export default {
       this.$refs.roleForm.resetFields()
       // 关闭弹层
       this.showDialog = false
+    },
+    // 点击编辑行
+    btnEditRow(row) {
+      // 改变行的编辑状态
+      row.isEdit = true
     }
   }
 }
