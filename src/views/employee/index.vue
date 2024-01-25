@@ -22,7 +22,28 @@
           <el-button size="mini">excel导出</el-button>
         </el-row>
         <!-- 表格组件 -->
+        <el-table>
+          <el-table-column align="center" label="头像" />
+          <el-table-column label="姓名" />
+          <el-table-column label="手机号" sortable />
+          <el-table-column label="工号" sortable />
+          <el-table-column label="聘用形式" />
+          <el-table-column label="部门" />
+          <el-table-column label="入职时间" sortable />
+          <el-table-column label="操作" />
+          <template>
+            <el-button size="mini" type="textarea">查看</el-button>
+            <el-button size="mini" type="textarea">角色</el-button>
+            <el-button size="mini" type="textarea">删除</el-button>
+          </template>
+        </el-table>
         <!-- 分页 -->
+        <el-row style="height:60px" align="middle" type="flex" justify="end">
+          <el-pagination
+            layout="total,prev,pager,next"
+            :total="1000"
+          />
+        </el-row>
       </div>
     </div>
   </div>
