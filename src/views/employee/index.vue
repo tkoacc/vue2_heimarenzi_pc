@@ -53,7 +53,10 @@
         <el-row style="height:60px" align="middle" type="flex" justify="end">
           <el-pagination
             layout="total,prev,pager,next"
-            :total="1000"
+            :total="total"
+            :current-page="queryParams.page"
+            :page-size="queryParams.pagesize"
+            @current-change="changePage"
           />
         </el-row>
       </div>
@@ -77,8 +80,13 @@ export default {
       },
       // 存储查询参数
       queryParams: {
-        departmentId: null
+        departmentId: null,
+        // 当前页码
+        page: 1,
+        pagesize: 10
       },
+      // 记录员工的总数
+      total: 0,
       // 储存员工列表
       list: []
     }
@@ -100,13 +108,24 @@ export default {
       this.getEmployeeList()
     },
     selectNode(node) {
+      // 重新记录了参数
       this.queryParams.departmentId = node.id
+      // 设置第一页
+      this.queryParams.page = 1
       this.getEmployeeList()
     },
     // 获取员工列表的方法
     async getEmployeeList() {
-      const { rows } = await getEmployeeList(this.queryParams)
+      const { rows, total } = await getEmployeeList(this.queryParams)
       this.list = rows
+      this.total = total
+    },
+    // 切换页码
+    changePage(newPage) {
+      // 赋值新页码
+      this.queryParams.page = newPage
+      // 查询数据
+      this.getEmployeeList()
     }
   }
 }
