@@ -15,7 +15,7 @@
         >
         <div class="drop">
           <i class="el-icon-upload" />
-          <el-button type="text">下载导入模板</el-button>
+          <el-button type="text" @click="getTemplate">下载导入模板</el-button>
           <span>将文件拖到此处或
             <el-button type="text">点击上传</el-button>
           </span>
@@ -28,8 +28,10 @@
     </el-row>
   </el-dialog>
 </template>
-<script>
 
+<script>
+import FileSaver from 'file-saver'
+import { getExportTemplate } from '@/api/employee'
 export default {
   props: {
     showExcelDialog: {
@@ -38,7 +40,10 @@ export default {
     }
   },
   methods: {
-
+    async getTemplate() {
+      const data = await getExportTemplate()
+      FileSaver.saveAs(data, '员工模板.xlsx')
+    }
   }
 }
 </script>
