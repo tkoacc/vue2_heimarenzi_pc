@@ -29,3 +29,13 @@ export function getExportTemplate() {
     responseType: 'blob'
   })
 }
+/**
+ * 上传用户的excel
+ */
+export function uploadExcel(data) {
+  return request({
+    url: '/sys/user/import',
+    method: 'post',
+    data
+  })
+}

@@ -12,12 +12,13 @@
           class="excel-upload-input"
           type="file"
           accept=".xlsx, .xls"
+          @change="uploadChange"
         >
         <div class="drop">
           <i class="el-icon-upload" />
           <el-button type="text" @click="getTemplate">下载导入模板</el-button>
           <span>将文件拖到此处或
-            <el-button type="text">点击上传</el-button>
+            <el-button type="text" @click="handleUpload">点击上传</el-button>
           </span>
         </div>
       </div>
@@ -31,7 +32,7 @@
 
 <script>
 import FileSaver from 'file-saver'
-import { getExportTemplate } from '@/api/employee'
+import { getExportTemplate, uploadExcel } from '@/api/employee'
 export default {
   props: {
     showExcelDialog: {
@@ -43,6 +44,33 @@ export default {
     async getTemplate() {
       const data = await getExportTemplate()
       FileSaver.saveAs(data, '员工模板.xlsx')
+    },
+    // 弹出文件选择器 只有一种方式 通过input file
+    handleUpload() {
+      this.$refs['excel-upload-input'].click()
+    },
+    async uploadChange(event) {
+      // 上传调用接口
+      const files = event.target.files
+      if (files.length > 0) {
+        // 大于0 证明有文件
+        const data = new FormData()
+        // file类型
+        // 将文件参数加入到formData中
+        data.append('file', files[0])
+        try {
+          await uploadExcel(data)
+          // 成功
+          // 通知父组件上传成功
+          this.$emit('uploadSuccess')
+          // 关闭弹层
+          this.$emit('update:showExcelDialog', false)
+        } catch (error) {
+
+        } finally {
+          this.$refs['excel-upload-input'].value = null
+        }
+      }
     }
   }
 }
