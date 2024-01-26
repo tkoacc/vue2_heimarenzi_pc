@@ -66,7 +66,7 @@ export default {
           // 关闭弹层
           this.$emit('update:showExcelDialog', false)
         } catch (error) {
-
+          this.$emit('uploadError', error)
         } finally {
           this.$refs['excel-upload-input'].value = null
         }
