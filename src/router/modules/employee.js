@@ -12,7 +12,7 @@ export default {
     }
   }, {
     // 员工详情的地址
-    path: '/employee/detail',
+    path: '/employee/detail/:id?',
     component: () => import('@/views/employee/detail.vue'),
     // 表示隐藏在左侧菜单
     hidden: true,
