@@ -40,8 +40,8 @@ export default {
     },
     uploadImage(params) {
       const cos = new COS({
-        SecretId: 'AKIDT6jIgsrdFhokcP2XtJ0iXXahbk1T0b6f',
-        SecretKey: 'u1V9u3rhao6JemxEe1ENUk7iMCY91EjN'
+        SecretId: '',
+        SecretKey: ''
       })
       cos.putObject({
         Bucket: 'renziheima-1324385062',
