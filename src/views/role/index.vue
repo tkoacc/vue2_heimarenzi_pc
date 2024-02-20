@@ -40,7 +40,7 @@
             </template>
             <template v-else>
               <!-- 非编辑状态 -->
-              <el-button size="mini" type="text">分配权限</el-button>
+              <el-button size="mini" type="text" @click="btnPermission">分配权限</el-button>
               <el-button size="mini" type="text" @click="btnEditRow(row)">编辑</el-button>
               <el-popconfirm
                 title="这段内容确定删除吗"
@@ -88,10 +88,23 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <!-- 放置权限弹层 -->
+    <el-dialog :visible.sync="showPermissionDialog" title="分配权限">
+      <!-- 放置权限数据 -->
+      <el-tree
+        :data="permissionData"
+        :props="{label: 'name'}"
+        show-checkbox
+        default-expand-all
+      />
+    </el-dialog>
   </div>
 </template>
+
 <script>
 import { getRoleList, addRole, updateRole, delRole } from '@/api/role'
+import { getPermissionList } from '@/api/permission'
+import { transListToTreeData } from '@/utils'
 export default {
   name: 'Role',
   data() {
@@ -121,7 +134,9 @@ export default {
         description: [
           { required: true, message: '角色描述不能为空', trigger: 'blur' }
         ]
-      }
+      },
+      showPermissionDialog: false,
+      permissionData: []
     }
   },
   created() {
@@ -203,6 +218,10 @@ export default {
         this.pageParams.page--
       }
       this.getRoleList()
+    },
+    async btnPermission() {
+      this.showPermissionDialog = true
+      this.permissionData = transListToTreeData(await getPermissionList(), 0)
     }
   }
 }
