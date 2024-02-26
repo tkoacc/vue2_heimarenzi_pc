@@ -1,12 +1,15 @@
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { login, getUserInfo } from '@/api/user'
+import { constantRoutes } from '@/router'
 import { resetRouter } from '@/router'
 
 const state = {
   // 从缓存中读取初始值
   token: getToken(),
   // 储存用户基本资料状态
-  userInfo: {}
+  userInfo: {},
+  // 储存用户的权限
+  routes: constantRoutes
 }
 
 const mutations = {
@@ -23,6 +26,9 @@ const mutations = {
   },
   setUserInfo(state, userInfo) {
     state.userInfo = userInfo
+  },
+  setRoutes(state, newRoutes) {
+    state.routes = [...constantRoutes, ...newRoutes]
   }
 }
 
