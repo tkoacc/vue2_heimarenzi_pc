@@ -7,7 +7,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
-
 import App from './App'
 import store from './store'
 import router from './router'
@@ -34,6 +33,16 @@ Vue.use(ElementUI)
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+// 注册自定义指令
+Vue.directive('permission', {
+  inserted(el, binding) {
+    console.log(el, binding)
+    const points = store.state.user.userInfo?.roles?.points || []
+    if (!points.includes(binding.value)) {
+      el.remove()
+    }
+  }
+})
 
 new Vue({
   el: '#app',
