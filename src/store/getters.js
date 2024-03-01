@@ -7,6 +7,8 @@ const getters = {
   avatar: state => state.user.userInfo.staffPhoto,
   // 用户名称
   name: state => state.user.userInfo.username,
-  routes: state => state.user.routes
+  routes: state => state.user.routes,
+  company: state => state.user.userInfo.company,
+  departmentName: state => state.user.userInfo.departmentName
 }
 export default getters
