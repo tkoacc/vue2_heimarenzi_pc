@@ -9,3 +9,11 @@ export function getHomeData() {
     url: '/home/data'
   })
 }
+/**
+ * 获取消息列表
+ */
+export function getMsgList() {
+  return request({
+    url: '/home/notice'
+  })
+}
