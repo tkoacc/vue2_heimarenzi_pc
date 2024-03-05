@@ -251,10 +251,18 @@
 </template>
 
 <script>
-import * as echarts from 'echarts'
+import * as echarts from 'echarts/core'
+import { LineChart } from 'echarts/charts'
+import { GridComponent } from 'echarts/components'
+import { CanvasRenderer } from 'echarts/renderers'
 import CountTo from 'vue-count-to'
 import { mapGetters } from 'vuex'
 import { getHomeData, getMsgList } from '@/api/home'
+echarts.use([
+  LineChart,
+  GridComponent,
+  CanvasRenderer
+])
 export default {
   components: {
     CountTo
